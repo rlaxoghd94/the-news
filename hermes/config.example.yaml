@@ -1,0 +1,28 @@
+# Repository source EXAMPLE, not a complete runtime config or a deployment command.
+# Do not copy over an existing Hermes home. See ../deploy/README.md.
+# Never start a gateway/worker from this checkout during scaffold validation.
+# No model/provider, credentials, channel routes or cron jobs are provisioned.
+# Omitted model settings are NOT a runtime model-call kill switch: existing homes
+# can inherit credentials/defaults/jobs. Activation requires a separate clean home
+# and explicit user decisions, not merely copying this YAML.
+gateway:
+  multiplex_profiles: true
+
+# Supported gateway platform setting. No token is present in this repository.
+# Do not merge with a live credential-bearing environment: env/plugin platform
+# discovery can affect effective configuration in the installed version.
+platforms:
+  discord:
+    enabled: false
+
+# Future topology: one gateway owns the dedicated news board's dispatcher.
+# Kept off here so this example does not dispatch tasks or run triage models.
+kanban:
+  dispatch_in_gateway: false
+  dispatch_profiles: []
+  review_dispatch: false
+  auto_decompose: false
+  notify_in_gateway: false
+
+security:
+  redact_secrets: true
