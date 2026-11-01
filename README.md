@@ -20,6 +20,12 @@ Hermes Agent 기반의 여러 에이전트가 하나의 신문사처럼 협업�
 
 ## 현재 상태
 
-프로젝트 초기 기획 단계입니다. 실행 코드와 배포 구성은 아직 없으며, 세부 기술스택과 발행 승인 정책은 미확정입니다.
+초기 scaffold 구축과 WordPress/MariaDB의 로컬 실행·컨테이너 재생성 후 데이터 보존 검증을 완료했습니다. 운영 VM 배포·Discord 연결·일일 자동 실행·공개 발행은 아직 하지 않았습니다. 주제·언어·발행량·시각·모델/예산·승인 정책 등 운영 결정은 미확정입니다.
 
-에이전트의 작업 원칙과 역할별 책임 초안은 [AGENTS.md](AGENTS.md)를 참고해 주세요.
+## 안내
+
+- [작업 원칙과 역할](AGENTS.md) · [요구사항 v0.1](REQUIREMENTS.md)
+- [초기 구성·로컬 검증·운영 경계](deploy/README.md)
+- [Hermes 설정 예시](hermes/config.example.yaml) · [일일 시작 prompt 원본](hermes/prompts/daily-edition.md)
+
+`hermes/`는 설정·역할의 **원본**이며 실제 `HERMES_HOME`이 아닙니다. 역할 프로필 수가 gateway나 Discord bot 수를 뜻하지 않으며, 이 저장소만으로 운영 기능을 자동 활성화하지 않습니다. 운영 전에는 공통 `AGENTS.md`가 실제 worker에 전달되는지도 확인해야 합니다.
