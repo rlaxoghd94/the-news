@@ -1,0 +1,48 @@
+# Local scaffold only; see README.md before any deployment.
+services:
+  mariadb:
+    image: mariadb:11.4.13
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: ${MARIADB_DATABASE:-the_news}
+      MARIADB_USER: ${MARIADB_USER:-the_news}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD:?Set a non-empty database user password}
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD:?Set a non-empty database root password}
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      start_period: 30s
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  wordpress:
+    image: wordpress:7.1.4-php8.3-apache
+    restart: unless-stopped
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    environment:
+      WORDPRESS_DB_HOST: mariadb:3306
+      WORDPRESS_DB_NAME: ${MARIADB_DATABASE:-the_news}
+      WORDPRESS_DB_USER: ${MARIADB_USER:-the_news}
+      WORDPRESS_DB_PASSWORD: ${MARIADB_PASSWORD:?Set a non-empty database user password}
+    ports:
+      - "127.0.0.1:${WORDPRESS_PORT:-8080}:80"
+    volumes:
+      - wordpress_data:/var/www/html
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  mariadb_data:
+  wordpress_data:

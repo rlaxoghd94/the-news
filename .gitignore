@@ -28,6 +28,18 @@ htmlcov/
 coverage.xml
 
 # Local runtime state and service volumes
+/.runtime/
+/.worktrees/
+/hermes/auth.json
+/hermes/config.yaml
+/hermes/gateway.json
+/hermes/profiles/*/*
+!/hermes/profiles/*/SOUL.md
+/hermes/cron/
+/hermes/sessions/
+/hermes/logs/
+/hermes/kanban/
+/deploy/volumes/
 /.hermes/
 /data/
 /volumes/
@@ -53,3 +65,7 @@ coverage.xml
 *.swp
 *.swo
 .DS_Store
+
+# Personal
+/.docs/
+!/.docs/plans/
