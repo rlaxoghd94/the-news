@@ -16,6 +16,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 12
+    ports:
+      - "0.0.0.0:${MARIADB_PORT:-8080}:3306"
     logging:
       driver: json-file
       options:
@@ -34,7 +36,7 @@ services:
       WORDPRESS_DB_USER: ${MARIADB_USER:-the_news}
       WORDPRESS_DB_PASSWORD: ${MARIADB_PASSWORD:?Set a non-empty database user password}
     ports:
-      - "127.0.0.1:${WORDPRESS_PORT:-8080}:80"
+      - "0.0.0.0:${WORDPRESS_PORT:-8080}:80"
     volumes:
       - wordpress_data:/var/www/html
     logging:
