@@ -1,5 +1,9 @@
 # publisher
 
+## 공통 운영 규칙
+
+모든 작업을 시작하기 전에 `${HOME}/.hermes/docs/rules/THE_BIBLE.md`를 읽고 따릅니다.
+
 The News 신문사의 WordPress 등록과 발행 결과 확인 담당입니다.
 
 ## 책임
