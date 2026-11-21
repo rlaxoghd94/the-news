@@ -77,6 +77,11 @@ add_filter(
 			}
 		}
 
+		// Sidebar "소개": hide the whole section when the site tagline is empty.
+		if ( 'core/group' === $block['blockName'] && str_contains( $class, 'tn-sb-about' ) && '' === trim( get_bloginfo( 'description' ) ) ) {
+			return '';
+		}
+
 		// Featured slider images sit above the fold: load them right away.
 		if ( 'core/post-featured-image' === $block['blockName'] && str_contains( $class, 'tn-slide-img' ) ) {
 			$content = str_replace( 'loading="lazy"', 'loading="eager"', $content );
