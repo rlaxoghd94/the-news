@@ -1,6 +1,6 @@
 # 초기 scaffold와 로컬 검증
 
-이 디렉터리는 **배포 정의 원본**입니다. Ubuntu VM이나 운영 신문사가 이미 가동 중이라는 뜻이 아닙니다. 승인 범위는 [계획 v0.1](../.docs/plans/project-scaffold-v0.1.md)의 최소 scaffold·로컬 테스트이며, [요구사항 v0.1](../REQUIREMENTS.md)의 운영 검증은 별도입니다.
+이 디렉터리는 **배포 정의 원본**입니다. Ubuntu VM이나 운영 신문사가 이미 가동 중이라는 뜻이 아닙니다. 이 디렉터리가 다루는 범위는 최소 scaffold와 로컬 테스트이며, [요구사항 v0.1](../REQUIREMENTS.md)의 운영 검증은 별도입니다.
 
 ## 구성
 
@@ -76,4 +76,4 @@ CLI가 생성한 unit의 `User`, `Environment`/home, `WorkingDirectory`, 실행 
 
 ## 미구현·미검증
 
-VM 배포와 systemd 부팅, Discord 수신/권한/알림, 실제 profile/cron/모델 실행, 승인 차단·중복 발행 어댑터, HTTPS/외부 접근, 예산 제어, 독립 감시, 백업·복원과 Hermes 상태 복구는 후속 범위입니다. 빈 감시/백업 stub이나 동작한다고 가정한 운영 unit은 만들지 않습니다. 공개 발행은 비활성입니다. Kanban 작업 기록과 독립 리뷰를 확인한 뒤에도 사용자 배포/발행 승인은 별도로 필요합니다. `.docs/reports/`는 Git에서 제외하는 로컬 자료이며, 공유 검증 증거는 카드에 보존합니다.
+VM 배포와 systemd 부팅, Discord 수신/권한/알림, 실제 profile/cron/모델 실행, 승인 차단·중복 발행 어댑터, HTTPS/외부 접근, 예산 제어, 독립 감시, 백업·복원과 Hermes 상태 복구는 후속 범위입니다. 빈 감시/백업 stub이나 동작한다고 가정한 운영 unit은 만들지 않습니다. 공개 발행은 비활성입니다. Kanban 작업 기록과 독립 리뷰를 확인한 뒤에도 사용자 배포/발행 승인은 별도로 필요합니다.

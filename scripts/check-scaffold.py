@@ -90,8 +90,8 @@ def check_files():
                      "deploy/README.md", "scripts/smoke-compose.py"):
         assert (ROOT / relative).is_file(), relative
     print("PASS example config, inactive daily prompt, deployment guide and smoke entrypoint exist")
-    ignored = ["deploy/.env", "deploy/.env.local", ".runtime/state.json", ".worktrees/probe/file", "hermes/auth.json", "deploy/volumes/probe", "hermes/profiles/writer/config.yaml", "hermes/profiles/writer/sessions/probe.jsonl", "hermes/profiles/publisher/.env"]
-    included = ["deploy/.env.example", "hermes/config.example.yaml", "hermes/profiles/writer/SOUL.md", ".docs/plans/project-scaffold-v0.1.md"]
+    ignored = ["deploy/.env", "deploy/.env.local", ".runtime/state.json", ".worktrees/probe/file", "hermes/auth.json", "deploy/volumes/probe", "hermes/profiles/writer/config.yaml", "hermes/profiles/writer/sessions/probe.jsonl", "hermes/profiles/publisher/.env", ".docs/plans/probe.md"]
+    included = ["deploy/.env.example", "hermes/config.example.yaml", "hermes/profiles/writer/SOUL.md"]
     for path in ignored + included:
         result = run(["git", "check-ignore", "--quiet", "--no-index", path])
         assert result.returncode == (0 if path in ignored else 1), path

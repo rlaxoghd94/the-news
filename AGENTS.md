@@ -38,11 +38,11 @@
 
 ## 저장소 구성과 현재 범위
 
-- 요구사항은 [REQUIREMENTS.md](REQUIREMENTS.md), 작업별 실행 범위는 승인된 [.docs/plans/](.docs/plans/) 문서를 확인합니다. 사용자의 최신 명시적 지시가 기존 문서의 오래된 작업 범위보다 우선합니다.
+- 요구사항은 [REQUIREMENTS.md](REQUIREMENTS.md)를 확인합니다. 사용자의 최신 명시적 지시가 기존 문서의 오래된 작업 범위보다 우선합니다.
 - `hermes/`는 역할·설정·프롬프트의 버전 관리 원본입니다. 실제 `HERMES_HOME`이나 운영 프로필 저장소가 아닙니다.
 - `deploy/`는 WordPress/MariaDB Compose 구성과 [배포 경계 안내](deploy/README.md), `scripts/`는 재실행 가능한 로컬 검증을 담당합니다.
 - 초기 scaffold와 로컬 Compose 검증은 완료했습니다. 실제 Ubuntu VM·systemd·Discord·모델·cron·공개 발행은 미구축·미검증 상태로 구분합니다.
-- `.docs/`에서는 `plans/`만 버전 관리합니다. 로컬 보고서는 Git에 포함되지 않으므로 공유 문서의 필수 참조로 연결하지 않고, 검증 증거는 Kanban 카드에도 남깁니다.
+- `.docs/`는 Git에 포함하지 않는 로컬 작업 문서입니다. 저장소 문서에서 링크하지 않고, 공유가 필요한 검증 증거는 Kanban 카드에 남깁니다.
 - 자체 Python 애플리케이션과 uv는 현재 도입하지 않았습니다. 검증 스크립트는 Python 표준 라이브러리를 사용합니다.
 
 ## 기술 방향과 운영 경계
