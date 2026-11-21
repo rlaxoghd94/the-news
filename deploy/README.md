@@ -8,6 +8,7 @@
 - MariaDB는 호스트 포트를 publish하지 않습니다. WordPress만 기본 `127.0.0.1:8080`에 바인딩합니다. 외부 proxy·도메인·HTTPS는 미구현입니다.
 - `mariadb_data`(`/var/lib/mysql`)와 `wordpress_data`(`/var/www/html`)는 서로 다른 named volume입니다. project 이름이 바뀌면 다른 볼륨이 생기므로 `compose.yaml`에 `name: the-news`로 고정했습니다. `-p`로 다른 이름을 주면 이 고정값을 덮어쓰고 빈 볼륨이 새로 생기므로 `-p`는 붙이지 않습니다. 볼륨은 백업이 아닙니다.
 - WordPress 컨테이너는 저장소의 [`wordpress/themes/the-news`](../wordpress/themes/the-news/)를 `wp-content/themes/the-news`에 **읽기 전용**으로 연결합니다. 테마 파일은 볼륨이 아니라 Git checkout이 기준입니다.
+- [`wordpress/mu-plugins`](wordpress/mu-plugins/)를 `wp-content/mu-plugins`에 읽기 전용으로 연결합니다. 사이트가 Tailscale·WireGuard 안의 HTTP 사이트라서, HTTPS가 아니어도 애플리케이션 비밀번호를 쓸 수 있게 합니다. publisher의 REST API 발행에 필요합니다.
 - `unless-stopped`는 프로세스 종료에 대한 restart policy입니다. 의도적으로 정지한 서비스·삭제된 컨테이너를 자동 복원하거나 `unhealthy`를 자동 복구하는 보장은 아닙니다.
 - `healthcheck.sh --connect --innodb_initialized`와 `depends_on: service_healthy`로 초기 DB readiness를 기다립니다. 이후 DB 장애 감시·자동 복구/발행 재시도와는 다릅니다. WordPress healthcheck는 별도로 없으며 검증기가 실제 HTTP를 확인합니다.
 - 두 서비스 로그는 `json-file`, `10m × 3` 제한입니다. 컨테이너 inspect·렌더된 config에는 환경변수 비밀 값이 나타날 수 있으므로 운영 출력을 카드/로그에 붙이지 마세요.

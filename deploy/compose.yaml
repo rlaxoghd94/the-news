@@ -43,6 +43,8 @@ services:
       - wordpress_data:/var/www/html
       # Theme source from this repository, read-only. Update with git pull; no container rebuild needed.
       - ../wordpress/themes/the-news:/var/www/html/wp-content/themes/the-news:ro
+      # Must-use plugins from this repository (app passwords over HTTP for the publisher), read-only.
+      - ./wordpress/mu-plugins:/var/www/html/wp-content/mu-plugins:ro
     logging:
       driver: json-file
       options:
