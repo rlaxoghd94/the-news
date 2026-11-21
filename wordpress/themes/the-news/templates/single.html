@@ -1,0 +1,30 @@
+<!-- wp:template-part {"slug":"header-narrow","area":"header"} /-->
+<!-- wp:group {"tagName":"main","className":"tn-single","layout":{"type":"constrained"}} -->
+<main class="wp-block-group tn-single">
+<!-- wp:group {"tagName":"article","className":"tn-article","layout":{"type":"constrained"}} -->
+<article class="wp-block-group tn-article">
+<!-- wp:group {"className":"tn-meta","layout":{"type":"flex","flexWrap":"wrap"}} -->
+<div class="wp-block-group tn-meta">
+<!-- wp:post-terms {"term":"category"} /-->
+<!-- wp:post-date {"format":"Y년 n월 j일"} /-->
+<!-- wp:paragraph {"metadata":{"bindings":{"content":{"source":"the-news/reading-time"}}},"className":"tn-rt"} -->
+<p class="tn-rt"></p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+<!-- wp:post-title {"level":1,"className":"tn-title"} /-->
+<!-- wp:post-excerpt {"className":"tn-standfirst"} /-->
+<!-- wp:post-featured-image {"aspectRatio":"16/9","sizeSlug":"large","className":"tn-hero-img"} /-->
+<!-- wp:post-content {"className":"tn-content","layout":{"type":"constrained"}} /-->
+</article>
+<!-- /wp:group -->
+<!-- wp:group {"tagName":"nav","className":"tn-pn","ariaLabel":"이전 글과 다음 글","layout":{"type":"grid","columnCount":2}} -->
+<nav class="wp-block-group tn-pn" aria-label="이전 글과 다음 글">
+<!-- wp:post-navigation-link {"type":"previous","label":"이전 글","showTitle":true,"linkLabel":true,"arrow":"none"} /-->
+<!-- wp:post-navigation-link {"textAlign":"right","label":"다음 글","showTitle":true,"linkLabel":true,"arrow":"none"} /-->
+</nav>
+<!-- /wp:group -->
+<!-- wp:comments {"legacy":true,"className":"tn-comments"} /-->
+</main>
+<!-- /wp:group -->
+<!-- wp:template-part {"slug":"footer","area":"footer"} /-->

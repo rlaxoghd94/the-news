@@ -1,0 +1,13 @@
+/*
+Theme Name: The News
+Description: 조사형 종합 블로그를 위한 블록 테마입니다. 대표 글 슬라이드, 월별 글 목록, 사이드바, 출처와 작성 과정을 보여 주는 글 상세 화면을 제공합니다.
+Version: 0.1.0
+Requires at least: 6.6
+Tested up to: 7.1
+Requires PHP: 8.1
+License: GNU General Public License v2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: the-news
+*/
+
+/* 레이아웃과 컴포넌트 스타일은 assets/css/theme.css에 있습니다. */
