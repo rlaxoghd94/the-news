@@ -7,6 +7,7 @@
 - `compose.yaml`: 공식 `wordpress:7.1.4-php8.3-apache`와 `mariadb:11.4.13`. PHP 8.3/MariaDB 11.4는 [WordPress 권장 사양](https://wordpress.org/about/requirements/)을 충족합니다. 검증 시 pull한 digest와 실행 결과는 Kanban 작업 기록에 남깁니다. 태그 고정은 digest 불변성·보안 업데이트 보장을 뜻하지 않습니다.
 - MariaDB는 호스트 포트를 publish하지 않습니다. WordPress만 기본 `127.0.0.1:8080`에 바인딩합니다. 외부 proxy·도메인·HTTPS는 미구현입니다.
 - `mariadb_data`(`/var/lib/mysql`)와 `wordpress_data`(`/var/www/html`)는 서로 다른 named volume입니다. project 이름이 바뀌면 다른 볼륨이 생기므로 운영 시 project 이름을 고정해야 합니다. 볼륨은 백업이 아닙니다.
+- WordPress 컨테이너는 저장소의 [`wordpress/themes/the-news`](../wordpress/themes/the-news/)를 `wp-content/themes/the-news`에 **읽기 전용**으로 연결합니다. 테마 파일은 볼륨이 아니라 Git checkout이 기준입니다.
 - `unless-stopped`는 프로세스 종료에 대한 restart policy입니다. 의도적으로 정지한 서비스·삭제된 컨테이너를 자동 복원하거나 `unhealthy`를 자동 복구하는 보장은 아닙니다.
 - `healthcheck.sh --connect --innodb_initialized`와 `depends_on: service_healthy`로 초기 DB readiness를 기다립니다. 이후 DB 장애 감시·자동 복구/발행 재시도와는 다릅니다. WordPress healthcheck는 별도로 없으며 검증기가 실제 HTTP를 확인합니다.
 - 두 서비스 로그는 `json-file`, `10m × 3` 제한입니다. 컨테이너 inspect·렌더된 config에는 환경변수 비밀 값이 나타날 수 있으므로 운영 출력을 카드/로그에 붙이지 마세요.
@@ -31,6 +32,19 @@ python3 scripts/smoke-compose.py
 smoke는 `finally`에서 **그 고유 project에만** `down --volumes --remove-orphans`를 적용하고 label 재조회로 정리를 확인합니다. 기존 자원 ID도 전후 대조합니다. 이미지 캐시는 남깁니다. 전역 prune이나 기존 project 정리는 하지 마세요. 강제 종료/daemon 단절로 정리가 실패하면 출력의 `PROJECT=`를 확인하고 그 project만 수동 점검·정리해야 합니다. 일반 운영에서 `down --volumes`는 데이터 삭제이므로 사용하지 마세요.
 
 Engine 24 같은 구버전의 loopback publish는 같은 L2 네트워크에서 접근될 수 있는 Docker의 알려진 제한이 있습니다([공식 포트 공개 문서](https://docs.docker.com/engine/network/port-publishing/)). 따라서 이 바인딩을 LAN/인터넷 격리 검증으로 해석하지 않습니다. smoke에서 방화벽·VM 네트워크를 바꾸지 않았으며 운영 전 지원되는 Engine과 실제 접근 경계를 검증해야 합니다.
+
+## 테마 적용과 갱신
+
+테마 연결을 처음 추가했을 때만 WordPress 컨테이너를 다시 만들어야 합니다. DB와 `wordpress_data` 볼륨은 그대로 유지됩니다. 저장소 루트에서 실행합니다.
+
+```sh
+git pull
+docker compose --env-file .env -f deploy/compose.yaml up -d wordpress
+```
+
+그다음 관리자 화면의 **외모 > 테마**에서 The News를 활성화합니다. 이후 테마 수정은 `git pull`만으로 반영되며 컨테이너를 다시 만들 필요가 없습니다. 문제가 있으면 같은 화면에서 이전 테마를 다시 활성화하면 됩니다. 글과 설정은 테마와 상관없이 유지됩니다.
+
+테마 폴더가 읽기 전용이므로 관리자 화면에서 이 테마를 수정하거나 업데이트할 수 없습니다. 테마 변경은 저장소에서 합니다.
 
 ## 비밀 값과 운영 활성화의 경계
 
