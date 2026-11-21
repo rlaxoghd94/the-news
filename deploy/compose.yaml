@@ -1,4 +1,6 @@
 # Local scaffold only; see README.md before any deployment.
+# Fixed project name: volumes are always the-news_mariadb_data / the-news_wordpress_data, with or without -p.
+name: the-news
 services:
   mariadb:
     image: mariadb:11.4.13

@@ -6,7 +6,7 @@
 
 - `compose.yaml`: 공식 `wordpress:7.1.4-php8.3-apache`와 `mariadb:11.4.13`. PHP 8.3/MariaDB 11.4는 [WordPress 권장 사양](https://wordpress.org/about/requirements/)을 충족합니다. 검증 시 pull한 digest와 실행 결과는 Kanban 작업 기록에 남깁니다. 태그 고정은 digest 불변성·보안 업데이트 보장을 뜻하지 않습니다.
 - MariaDB는 호스트 포트를 publish하지 않습니다. WordPress만 기본 `127.0.0.1:8080`에 바인딩합니다. 외부 proxy·도메인·HTTPS는 미구현입니다.
-- `mariadb_data`(`/var/lib/mysql`)와 `wordpress_data`(`/var/www/html`)는 서로 다른 named volume입니다. project 이름이 바뀌면 다른 볼륨이 생기므로 운영 시 project 이름을 고정해야 합니다. 볼륨은 백업이 아닙니다.
+- `mariadb_data`(`/var/lib/mysql`)와 `wordpress_data`(`/var/www/html`)는 서로 다른 named volume입니다. project 이름이 바뀌면 다른 볼륨이 생기므로 `compose.yaml`에 `name: the-news`로 고정했습니다. `-p`로 다른 이름을 주면 이 고정값을 덮어쓰고 빈 볼륨이 새로 생기므로 `-p`는 붙이지 않습니다. 볼륨은 백업이 아닙니다.
 - WordPress 컨테이너는 저장소의 [`wordpress/themes/the-news`](../wordpress/themes/the-news/)를 `wp-content/themes/the-news`에 **읽기 전용**으로 연결합니다. 테마 파일은 볼륨이 아니라 Git checkout이 기준입니다.
 - `unless-stopped`는 프로세스 종료에 대한 restart policy입니다. 의도적으로 정지한 서비스·삭제된 컨테이너를 자동 복원하거나 `unhealthy`를 자동 복구하는 보장은 아닙니다.
 - `healthcheck.sh --connect --innodb_initialized`와 `depends_on: service_healthy`로 초기 DB readiness를 기다립니다. 이후 DB 장애 감시·자동 복구/발행 재시도와는 다릅니다. WordPress healthcheck는 별도로 없으며 검증기가 실제 HTTP를 확인합니다.
