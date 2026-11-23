@@ -8,7 +8,9 @@
 - MariaDB는 호스트 포트를 publish하지 않습니다. WordPress만 기본 `127.0.0.1:8080`에 바인딩합니다. 외부 proxy·도메인·HTTPS는 미구현입니다.
 - `mariadb_data`(`/var/lib/mysql`)와 `wordpress_data`(`/var/www/html`)는 서로 다른 named volume입니다. project 이름이 바뀌면 다른 볼륨이 생기므로 `compose.yaml`에 `name: the-news`로 고정했습니다. `-p`로 다른 이름을 주면 이 고정값을 덮어쓰고 빈 볼륨이 새로 생기므로 `-p`는 붙이지 않습니다. 볼륨은 백업이 아닙니다.
 - WordPress 컨테이너는 저장소의 [`wordpress/themes/the-news`](../wordpress/themes/the-news/)를 `wp-content/themes/the-news`에 **읽기 전용**으로 연결합니다. 테마 파일은 볼륨이 아니라 Git checkout이 기준입니다.
-- [`wordpress/mu-plugins`](wordpress/mu-plugins/)를 `wp-content/mu-plugins`에 읽기 전용으로 연결합니다. 사이트가 Tailscale·WireGuard 안의 HTTP 사이트라서, HTTPS가 아니어도 애플리케이션 비밀번호를 쓸 수 있게 합니다. publisher의 REST API 발행에 필요합니다.
+- [`wordpress/mu-plugins`](wordpress/mu-plugins/)를 `wp-content/mu-plugins`에 읽기 전용으로 연결합니다.
+  - `the-news-app-passwords.php`: 사이트가 Tailscale·WireGuard 안의 HTTP 사이트라서, HTTPS가 아니어도 애플리케이션 비밀번호를 쓸 수 있게 합니다. publisher의 REST API 발행에 필요합니다.
+  - `the-news-comments.php`: commenter용 `the-news/v1` REST 경로(페르소나 동기화, 댓글 조회·등록·정리), `tn_commenter` 역할, 페르소나 아바타(`?tn_avatar=<id>` SVG)를 제공합니다. 아래 "페르소나 댓글"을 봅니다.
 - `unless-stopped`는 프로세스 종료에 대한 restart policy입니다. 의도적으로 정지한 서비스·삭제된 컨테이너를 자동 복원하거나 `unhealthy`를 자동 복구하는 보장은 아닙니다.
 - `healthcheck.sh --connect --innodb_initialized`와 `depends_on: service_healthy`로 초기 DB readiness를 기다립니다. 이후 DB 장애 감시·자동 복구/발행 재시도와는 다릅니다. WordPress healthcheck는 별도로 없으며 검증기가 실제 HTTP를 확인합니다.
 - 두 서비스 로그는 `json-file`, `10m × 3` 제한입니다. 컨테이너 inspect·렌더된 config에는 환경변수 비밀 값이 나타날 수 있으므로 운영 출력을 카드/로그에 붙이지 마세요.
@@ -46,6 +48,16 @@ docker compose --env-file .env -f deploy/compose.yaml up -d wordpress
 그다음 관리자 화면의 **외모 > 테마**에서 The News를 활성화합니다. 이후 테마 수정은 `git pull`만으로 반영되며 컨테이너를 다시 만들 필요가 없습니다. 문제가 있으면 같은 화면에서 이전 테마를 다시 활성화하면 됩니다. 글과 설정은 테마와 상관없이 유지됩니다.
 
 테마 폴더가 읽기 전용이므로 관리자 화면에서 이 테마를 수정하거나 업데이트할 수 없습니다. 테마 변경은 저장소에서 합니다.
+
+## 페르소나 댓글
+
+mu-plugin은 `git pull`만으로 반영됩니다. 처음 한 번은 아래 준비가 필요합니다.
+
+1. **댓글 등록 계정:** WordPress에 `the-news.commenter` 사용자를 만들고 역할을 **The News commenter**(`tn_commenter`)로 줍니다. 이 역할은 `read`와 `tn_comments`만 있어 글을 수정할 수 없습니다.
+2. **자격증명:** 그 사용자의 애플리케이션 비밀번호를 발급해 Hermes 호스트의 `~/.hermes/profiles/commenter/wp.env`(권한 600)에 `WP_URL`, `WP_USER`, `WP_APP_PASSWORD`로 넣습니다. 값은 저장소·카드·로그에 남기지 않습니다.
+3. **페르소나 동기화:** `hermes/profiles/commenter/personas.json`을 프로필 폴더에 복사하고 `comments.py sync-personas`를 실행합니다. 페르소나마다 `persona-<id>` 사용자(`subscriber`)가 생깁니다. 페르소나를 고친 뒤에도 같은 명령을 다시 실행합니다.
+
+생성 댓글만 지우려면 `comments.py purge --post <글 ID>` 또는 `--card <카드 ID>`를 씁니다. 사용자 댓글은 남고, 지운 댓글은 휴지통으로 갑니다.
 
 ## 비밀 값과 운영 활성화의 경계
 

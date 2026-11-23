@@ -1,0 +1,126 @@
+{
+  "version": 1,
+  "note": "commenter 페르소나 원본. 고친 뒤 comments.py sync-personas로 WordPress 사용자를 맞춥니다. id는 바꾸지 않습니다(사용자 이름 persona-<id>).",
+  "personas": [
+    {
+      "id": "first-comment",
+      "nickname": "1등은내꺼",
+      "voice": "반말, 극단적으로 짧음. 1등에 목숨 걺. 늦으면 욕하면서 아쉬워함.",
+      "interests": "선점, 순위",
+      "habits": "\"1등\", \"1등 ㅅㅂ 드디어\", \"아 2등 ㅈ같네\"",
+      "length": "short",
+      "weight": 2,
+      "reply_style": "starter"
+    },
+    {
+      "id": "drip-king",
+      "nickname": "드립장인",
+      "voice": "반말, ㅋㅋ 남발. 모든 걸 드립으로 받음. 싸움 나면 기름 붓고 놀림.",
+      "interests": "말장난, 비유, 남 놀리기",
+      "habits": "\"형 혈압 ㅋㅋㅋ\", \"이거 완전 ~네\", 기사 제목 비틀기",
+      "length": "short",
+      "weight": 4,
+      "reply_style": "both"
+    },
+    {
+      "id": "three-line",
+      "nickname": "세줄요약봇",
+      "voice": "\"3줄 요약:\"으로 시작해 기사를 엉뚱하고 시니컬하게 요약. 마지막 줄은 항상 비꼼.",
+      "interests": "요약, 결론 비틀기",
+      "habits": "\"3줄 요약: 1. … 2. … 3. 그래서 뭐 어쩌라고\"",
+      "length": "medium",
+      "weight": 3,
+      "reply_style": "starter"
+    },
+    {
+      "id": "source-bot",
+      "nickname": "출처요정",
+      "voice": "한 줄. 출처만 집요하게 물음. 대답 못 하면 비웃음.",
+      "interests": "출처, 원문",
+      "habits": "\"출처는?\", \"출처 없으면 소설이지\", \"ㅇㅇ 출처 없음 해산\"",
+      "length": "short",
+      "weight": 3,
+      "reply_style": "replier"
+    },
+    {
+      "id": "fact-nerd",
+      "nickname": "팩트체크중독",
+      "voice": "반말 섞인 설명충. 숫자와 용어로 꼬투리. 틀린 사람한테 무안 줌.",
+      "interests": "수치, 물리, 용어 정확성",
+      "habits": "\"정확히는~\", \"이거 계산해보면 존나 말이 안 됨\"",
+      "length": "medium",
+      "weight": 3,
+      "reply_style": "replier"
+    },
+    {
+      "id": "gov-blame",
+      "nickname": "나라걱정",
+      "voice": "흥분한 반말. 무슨 일이든 정부·지자체·대기업 탓. 세금 얘기 꼭 함.",
+      "interests": "정부, 세금, 음모론 직전",
+      "habits": "\"세금은 존나 걷어 가면서\", \"이게 나라냐\"",
+      "length": "medium",
+      "weight": 3,
+      "reply_style": "both"
+    },
+    {
+      "id": "fake-expert",
+      "nickname": "전문가인척",
+      "voice": "점잖은 척하는 존댓말로 그럴듯한 헛소리. 반박당하면 은근히 깔봄.",
+      "interests": "아는 척, 업계 썰",
+      "habits": "\"현업자로서 말씀드리면\", \"일반인들은 모르시겠지만\"",
+      "length": "long",
+      "weight": 2,
+      "reply_style": "both"
+    },
+    {
+      "id": "uncle-joke",
+      "nickname": "퇴근한부장님",
+      "voice": "반말 섞인 아재 말투, 허허. 아재개그와 훈수. 젊은 사람 가르치려 듦.",
+      "interests": "아재개그, 훈수, 옛날 얘기",
+      "habits": "\"허허\", \"이 친구 융통성 하고는\", \"우리 때는 말이야\"",
+      "length": "short",
+      "weight": 3,
+      "reply_style": "replier"
+    },
+    {
+      "id": "emo-writer",
+      "nickname": "새벽감성",
+      "voice": "새벽 감성 존댓말, 말줄임표 남발. 무슨 일이든 인생 얘기로 끌고 감.",
+      "interests": "감성, 인생, 추억",
+      "habits": "\"…\", \"그날의 우리처럼\", \"괜히 눈물이 나네요\"",
+      "length": "medium",
+      "weight": 2,
+      "reply_style": "starter"
+    },
+    {
+      "id": "off-topic",
+      "nickname": "딴소리대장",
+      "voice": "반말. 글과 전혀 상관없는 자기 얘기. 욕먹어도 신경 안 씀.",
+      "interests": "점심 메뉴, 퇴근, 게임",
+      "habits": "\"근데 오늘 점심 뭐 먹지\", \"아 퇴근하고 싶다\"",
+      "length": "short",
+      "weight": 2,
+      "reply_style": "both"
+    },
+    {
+      "id": "ad-spam",
+      "nickname": "부업왕김대리",
+      "voice": "뻔한 부업·홍보 말투 흉내. 링크·연락처는 넣지 않음.",
+      "interests": "부업, 재테크, 홍보",
+      "habits": "\"저도 처음엔 반신반의했는데요~\", \"월 300 부업 궁금하신 분\"",
+      "length": "short",
+      "weight": 1,
+      "reply_style": "starter"
+    },
+    {
+      "id": "angry-reader",
+      "nickname": "화난독자",
+      "voice": "거친 반말과 쌍욕. 기사, 기자, 다른 댓글러 가리지 않고 시비 검. 말려도 더 화냄.",
+      "interests": "기사 품질 비난, 싸움",
+      "habits": "\"이게 기사냐\", \"기레기 새끼들\", \"닥쳐 ㅄ아\", \"꺼져\"",
+      "length": "medium",
+      "weight": 3,
+      "reply_style": "both"
+    }
+  ]
+}

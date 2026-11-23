@@ -35,6 +35,7 @@ coverage.xml
 /hermes/gateway.json
 /hermes/profiles/*/*
 !/hermes/profiles/*/SOUL.md
+!/hermes/profiles/commenter/personas.json
 /hermes/cron/
 /hermes/sessions/
 /hermes/logs/

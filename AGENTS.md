@@ -27,6 +27,8 @@
 | editor | 후보 선정과 편집을 담당하고 사실성·흥미·중복·표현을 검토합니다. | 채택·보류·반려 판단과 수정 요청 또는 승인본 |
 | publisher | 허용된 발행 정책에 따라 승인본을 WordPress에 등록하고 결과를 확인합니다. | WordPress 글 ID, 상태, URL과 처리 결과 |
 
+기사 흐름과 별개로, `commenter`가 사용자가 지정한 글에 가상 페르소나 댓글을 답니다. 사용자가 Discord `#news-comments`에서 `@the-news #<글 ID>`로 요청하면 default 프로필이 첫 줄이 `작업 유형: 댓글공작`인 카드를 commenter에게 만듭니다. 페르소나는 [hermes/profiles/commenter/personas.json](hermes/profiles/commenter/personas.json)에 있고, 등록은 [the-news-comments skill](hermes/skills/the-news-comments/SKILL.md)로만 합니다. 말투 세기는 제한하지 않습니다.
+
 `anonymous tipper`라는 이름만으로 제보자의 기술적 익명성이 보장되는 것은 아닙니다. 제보 수집 범위와 익명화 정책은 별도로 결정합니다.
 
 ## 기사 유형
