@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""The News persona comments: read, post, status, purge, sync-personas.
+"""The News persona comments: read, post, status, purge, sync-personas, watch.
 
 Talks to the `the-news/v1` REST routes from deploy/wordpress/mu-plugins/the-news-comments.php.
 Credentials come from an env file (default ~/.hermes/profiles/commenter/wp.env) with WP_URL,
@@ -13,6 +13,7 @@ import base64
 import html
 import json
 import re
+import subprocess
 import sys
 import urllib.error
 import urllib.parse
@@ -286,8 +287,51 @@ def cmd_sync(wp, a):
     return True, {"synced": len(res), "personas": res}
 
 
+def kanban(hermes, *args, stdin=None):
+    res = subprocess.run([hermes, "kanban", *args], input=stdin, text=True, capture_output=True, timeout=60)
+    if res.returncode != 0:
+        raise RuntimeError(f"hermes kanban {args[0]} failed: {(res.stderr or res.stdout).strip()[:300]}")
+    return res.stdout
+
+
+def cmd_watch(wp, a):
+    """Turn new human comments into commenter reaction cards (one per post). No model call.
+
+    The first run only records the current newest comment ID, so old comments are never
+    reacted to. Run from a timer; safe to run repeatedly (idempotency key per post + comment)."""
+    state_path = Path(a.state)
+    state = json.loads(state_path.read_text()) if state_path.exists() else {}
+    last = int(state.get("last_id") or 0)
+    res = wp.call("GET", f"/the-news/v1/user-comments?after_id={last}")
+    if not last:
+        state_path.write_text(json.dumps({"last_id": res["max_id"]}))
+        return True, {"initialized": True, "last_id": res["max_id"], "cards": []}
+
+    by_post = {}
+    for c in res["comments"]:
+        by_post.setdefault(c["post"], []).append(c)
+    cards = []
+    for post_id, comments in sorted(by_post.items()):
+        ids = [c["id"] for c in comments]
+        quoted = "\n".join(f"- #{c['id']} {c['author']}: {c['content']}" for c in comments)
+        body = (f"작업 유형: 댓글공작\n대상 글: {post_id}\n요청 개수: 자동\n모드: 반응\n"
+                f"대상 댓글: {', '.join(map(str, ids))}\n"
+                f"요청 원문: (자동) 사이트에 사용자 댓글이 새로 달렸습니다.\n{quoted}\n")
+        out = kanban(a.hermes, "create", "--assignee", "commenter", "--json",
+                     "--idempotency-key", f"react-{post_id}-{max(ids)}", "--body-file", "-",
+                     f"[반응] #{post_id} 사용자 댓글 {len(ids)}개", stdin=body)
+        task = json.loads(out)
+        tid = task.get("id") or task.get("task_id") or (task.get("task") or {}).get("id")
+        if tid and a.notify_chat:
+            kanban(a.hermes, "notify-subscribe", "--platform", "discord", "--chat-id", a.notify_chat,
+                   "--chat-type", "channel", tid)
+        cards.append({"post_id": post_id, "comments": ids, "card": tid})
+    state_path.write_text(json.dumps({"last_id": max([last, res["max_id"]])}))
+    return True, {"last_id": max(last, res["max_id"]), "cards": cards}
+
+
 COMMANDS = {"read": cmd_read, "post": cmd_post, "status": cmd_status, "purge": cmd_purge,
-            "sync-personas": cmd_sync}
+            "sync-personas": cmd_sync, "watch": cmd_watch}
 
 
 def main():
@@ -309,6 +353,10 @@ def main():
     p.add_argument("--post")
     p.add_argument("--card")
     sub.add_parser("sync-personas", help="create/update persona users from the personas file")
+    p = sub.add_parser("watch", help="create commenter reaction cards for new human comments (timer)")
+    p.add_argument("--state", default=str(PROFILE / "react-watch.json"))
+    p.add_argument("--hermes", default=str(Path.home() / ".local" / "bin" / "hermes"))
+    p.add_argument("--notify-chat", default="", help="Discord channel ID to notify when a card finishes")
 
     a = ap.parse_args()
     try:

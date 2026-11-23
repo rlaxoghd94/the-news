@@ -267,6 +267,51 @@ add_action(
 			)
 		);
 
+		/*
+		 * Human comments (not generated, not by a persona or tn_commenter account) newer than
+		 * after_id, for the reaction watcher. max_id lets the watcher start from "now".
+		 */
+		register_rest_route(
+			'the-news/v1',
+			'/user-comments',
+			array(
+				'methods'             => 'GET',
+				'permission_callback' => $can,
+				'args'                => array(
+					'after_id' => array( 'type' => 'integer', 'default' => 0 ),
+				),
+				'callback'            => function ( WP_REST_Request $req ) {
+					global $wpdb;
+					$max_id = (int) $wpdb->get_var( "SELECT MAX(comment_ID) FROM {$wpdb->comments}" );
+					$after  = (int) $req['after_id'];
+					$out    = array();
+					if ( $after > 0 ) {
+						$rows = $wpdb->get_col( $wpdb->prepare( "SELECT comment_ID FROM {$wpdb->comments} WHERE comment_ID > %d AND comment_approved = '1' AND comment_type IN ('comment','') ORDER BY comment_ID LIMIT 200", $after ) );
+						foreach ( $rows as $cid ) {
+							$c = get_comment( $cid );
+							if ( ! $c || get_comment_meta( $cid, '_tn_generated', true ) ) {
+								continue;
+							}
+							if ( tn_persona_of_user( $c->user_id ) || ( $c->user_id && user_can( (int) $c->user_id, TN_COMMENTS_CAP ) && ! user_can( (int) $c->user_id, 'manage_options' ) ) ) {
+								continue;
+							}
+							if ( 'publish' !== get_post_status( $c->comment_post_ID ) ) {
+								continue;
+							}
+							$out[] = array(
+								'id'      => (int) $cid,
+								'post'    => (int) $c->comment_post_ID,
+								'parent'  => (int) $c->comment_parent,
+								'author'  => $c->comment_author,
+								'content' => wp_trim_words( $c->comment_content, 40, '…' ),
+							);
+						}
+					}
+					return array( 'max_id' => $max_id, 'comments' => $out );
+				},
+			)
+		);
+
 		// Move generated comments to trash, by post or by card. Never touches user comments.
 		register_rest_route(
 			'the-news/v1',

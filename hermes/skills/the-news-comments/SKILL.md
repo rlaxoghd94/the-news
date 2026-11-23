@@ -33,6 +33,7 @@ python3 ~/.hermes/profiles/commenter/skills/publishing/the-news-comments/scripts
 | `post` | 댓글 계획 파일을 순서대로 등록합니다. 계획이 검증을 통과하지 못하면 하나도 등록하지 않습니다. | `--plan <파일>`, `--card <카드 ID>`, `--post`(생략 시 계획의 `post`) |
 | `status` | 이 카드로 등록된 댓글 목록 | `--post`, `--card` |
 | `purge` | 생성된 댓글을 휴지통으로 보냅니다. 사용자 댓글은 건드리지 않습니다. | `--post` 그리고/또는 `--card` |
+| `watch` | 타이머 전용입니다. 새 사용자 댓글을 찾아 글마다 반응 카드(`모드: 반응`)를 만듭니다. 모델 호출이 없으며 commenter는 실행하지 않습니다. | `--notify-chat <Discord 채널 ID>` |
 | `sync-personas` | 페르소나 파일대로 WordPress 사용자를 만들거나 이름·아바타를 갱신합니다. **사용자가 요청한 경우에만** 실행합니다. | |
 
 ## 댓글 계획 파일

@@ -57,6 +57,8 @@ mu-plugin은 `git pull`만으로 반영됩니다. 처음 한 번은 아래 준�
 2. **자격증명:** 그 사용자의 애플리케이션 비밀번호를 발급해 Hermes 호스트의 `~/.hermes/profiles/commenter/wp.env`(권한 600)에 `WP_URL`, `WP_USER`, `WP_APP_PASSWORD`로 넣습니다. 값은 저장소·카드·로그에 남기지 않습니다.
 3. **페르소나 동기화:** `hermes/profiles/commenter/personas.json`을 프로필 폴더에 복사하고 `comments.py sync-personas`를 실행합니다. 페르소나마다 `persona-<id>` 사용자(`subscriber`)가 생깁니다. 페르소나를 고친 뒤에도 같은 명령을 다시 실행합니다.
 
+4. **사용자 댓글 반응(선택):** [`hermes/systemd/`](../hermes/systemd/)의 `the-news-comment-watch.service`와 `.timer`를 Hermes 계정의 `~/.config/systemd/user/`에 복사하고 `systemctl --user enable --now the-news-comment-watch.timer`를 실행합니다. 2분마다 새 사용자 댓글을 찾아 글마다 commenter 반응 카드를 만듭니다. 처음 실행할 때는 기준점만 기록하므로, 그전에 달린 댓글에는 반응하지 않습니다.
+
 생성 댓글만 지우려면 `comments.py purge --post <글 ID>` 또는 `--card <카드 ID>`를 씁니다. 사용자 댓글은 남고, 지운 댓글은 휴지통으로 갑니다.
 
 ## 비밀 값과 운영 활성화의 경계

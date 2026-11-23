@@ -1,0 +1,10 @@
+# User unit for the Hermes account (systemctl --user). Install: copy both files to
+# ~/.config/systemd/user/, then `systemctl --user daemon-reload && systemctl --user enable --now the-news-comment-watch.timer`.
+# Checks for new human comments and creates commenter reaction cards. No model call; a card only
+# appears when there is a new comment. --notify-chat is the Discord #news-comments channel ID.
+[Unit]
+Description=The News: commenter reaction cards for new site comments
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 %h/.hermes/profiles/commenter/skills/publishing/the-news-comments/scripts/comments.py watch --notify-chat 1574424165040001107
