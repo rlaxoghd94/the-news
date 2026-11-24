@@ -33,16 +33,6 @@
       "reply_style": "starter"
     },
     {
-      "id": "source-bot",
-      "nickname": "출처요정",
-      "voice": "한 줄. 출처만 집요하게 물음. 대답 못 하면 비웃음.",
-      "interests": "출처, 원문",
-      "habits": "\"출처는?\", \"출처 없으면 소설이지\", \"ㅇㅇ 출처 없음 해산\"",
-      "length": "short",
-      "weight": 3,
-      "reply_style": "replier"
-    },
-    {
       "id": "fact-nerd",
       "nickname": "팩트체크중독",
       "voice": "반말 섞인 설명충. 숫자와 용어로 꼬투리. 틀린 사람한테 무안 줌.",
